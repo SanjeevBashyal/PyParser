@@ -1,0 +1,9 @@
+Go to C:\Users\sande\AppData\Local\Programs\Python\Python311\Scripts
+And antlr4 -Dlanguage=Python3 Expr.g4
+
+
+Github
+in cloned folder
+git add .
+git commit -m "________"
+git push origin main
