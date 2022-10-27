@@ -1,3 +1,7 @@
+import sys
+from antlr4 import *
+
+
 def main(argv):
     # Takes input from a file
     input = InputStream(readInputFile("test.txt"))
