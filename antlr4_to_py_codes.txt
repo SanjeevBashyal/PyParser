@@ -1,6 +1,8 @@
 Go to C:\Users\sande\AppData\Local\Programs\Python\Python311\Scripts
-And antlr4 -Dlanguage=Python3 Expr.g4
 
+Common commands:
+    antlr4 -Dlanguage=Python3 Expr.g4
+    antlr4-parse Expr.g4 prog -tree
 
 Github
 in cloned folder

@@ -10,7 +10,7 @@ column_spec: ID ':' column_type;
 column_type: 'string' | 'int';
 
 IDS : ID ( ',' ID )* | '*';
-ID : [a-zA-Z]+ ;
+
 
 select_stmt: 'SELECT' IDS 'FROM' ID ('WHERE' CONDS)*;
 
@@ -28,8 +28,8 @@ GEQ: '>=';
 LEQ: '<=';
 NEQ: '!=';
 
-
+ID: [a-zA-Z]+;
 NEWLINE : [\r\n]+ ;
 INT : [0-9]+ ;
-STRING: [a-zA-Z]+;
+STRING: '"' (~('\n' | '"'))* '"';
 WS : [ \t\r\n] -> channel(HIDDEN);
