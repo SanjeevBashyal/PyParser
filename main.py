@@ -4,8 +4,10 @@ from ExprLexer import ExprLexer
 from ExprParser import ExprParser
 from MySqlVisitor import MySqlVisitor
 
-def readInputFile():
-    pass
+def readInputFile(filename):
+    with open(filename) as fn:
+        data = fn.read()
+    return data
 
 def main(argv):
     # Takes input from a file
