@@ -1,9 +1,0 @@
-// Creates a table student with name and age being two columns.
-CREATE table Student(name : string, age : int);
-// Adds a row to the table
-INSERT INTO Student("alice", 12);
-// Shows all records saved in the table
-SELECT name, age FROM Student;
-// Supports basic filter with conditionals
-SELECT name FROM Student
-WHERE name != "alice" OR age = 15;

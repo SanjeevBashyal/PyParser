@@ -10,7 +10,7 @@ else:
 
 def serializedATN():
     return [
-        4,1,23,85,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
+        4,1,29,85,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
         6,2,7,7,7,2,8,7,8,1,0,5,0,20,8,0,10,0,12,0,23,9,0,1,0,1,0,1,1,1,
         1,1,1,1,1,5,1,31,8,1,10,1,12,1,34,9,1,3,1,36,8,1,1,2,1,2,1,2,1,2,
         1,2,1,2,1,2,1,3,1,3,1,3,5,3,48,8,3,10,3,12,3,51,9,3,1,4,1,4,1,4,
@@ -49,14 +49,16 @@ class ExprParser ( Parser ):
 
     literalNames = [ "<INVALID>", "';'", "'CREATE'", "'table'", "'('", "')'", 
                      "','", "':'", "'string'", "'int'", "'SELECT'", "'FROM'", 
-                     "'WHERE'", "'INSERT'", "'INTO'" ]
+                     "'WHERE'", "'INSERT'", "'INTO'", "<INVALID>", "<INVALID>", 
+                     "<INVALID>", "<INVALID>", "<INVALID>", "'='", "'>'", 
+                     "'<'", "'>='", "'<='", "'!='" ]
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "IDS", "ID", 
-                      "CONDS", "COND", "VAL", "NEWLINE", "INT", "STRING", 
-                      "WS" ]
+                      "CONDS", "COND", "VAL", "EQ", "GR", "LS", "GEQ", "LEQ", 
+                      "NEQ", "NEWLINE", "INT", "STRING", "WS" ]
 
     RULE_prog = 0
     RULE_expr = 1
@@ -91,10 +93,16 @@ class ExprParser ( Parser ):
     CONDS=17
     COND=18
     VAL=19
-    NEWLINE=20
-    INT=21
-    STRING=22
-    WS=23
+    EQ=20
+    GR=21
+    LS=22
+    GEQ=23
+    LEQ=24
+    NEQ=25
+    NEWLINE=26
+    INT=27
+    STRING=28
+    WS=29
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)

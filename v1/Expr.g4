@@ -15,11 +15,19 @@ ID : [a-zA-Z]+ ;
 select_stmt: 'SELECT' IDS 'FROM' ID ('WHERE' CONDS)*;
 
 CONDS: COND (('OR'| 'AND') COND)* ;
-COND : ID '=' | '>' | '<' | '<=' | '>=' | '!=' VAL ;
+COND : ID ('=' | '>' | '<' | '>=' | '<=' | '!=') VAL ;
 VAL : INT | '"' STRING '"' ;
 
 insert_stmt: 'INSERT' 'INTO' ID '(' data ')' ;
 data: VAL ( ',' VAL )* ;
+
+EQ: '=';
+GR: '>';
+LS: '<';
+GEQ: '>=';
+LEQ: '<=';
+NEQ: '!=';
+
 
 NEWLINE : [\r\n]+ ;
 INT : [0-9]+ ;
