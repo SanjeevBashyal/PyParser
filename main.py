@@ -1,9 +1,10 @@
 import sys
 import os
 from antlr4 import *
-from ExprLexer import ExprLexer
-from ExprParser import ExprParser
-# from MySqlVisitor import MySqlVisitor
+from SqlLexer import SqlLexer
+from SqlParser import SqlParser
+from SqlVisitor import SqlVisitor
+from MySqlVisitor import MySqlVisitor
 
 path=os.getcwd()
 
@@ -15,13 +16,13 @@ def readInputFile(filename):
 def main(argv):
     # Takes input from a file
     input = InputStream(readInputFile(os.path.join(path,'code.txt')))
-    lexer = ExprLexer(input)
+    lexer = SqlLexer(input)
     stream = CommonTokenStream(lexer)
-    parser = ExprParser(stream)
+    parser = SqlParser(stream)
     tree = parser.prog()
     # MySqlVisitor extends the generated visitor file
-    # MySqlVisitor().visitProg(tree) # Evaluate the expression
-    print(tree.toStringTree())
+    MySqlVisitor().visitProg(tree) # Evaluate the expression
+    print("Test")
 
 if __name__ == '__main__':
     main(sys.argv)

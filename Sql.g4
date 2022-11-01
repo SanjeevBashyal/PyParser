@@ -1,7 +1,8 @@
-grammar Expr;
-prog: expr* EOF;
+grammar Sql;
+prog: expr EOF;
+expr: stmt*;
 
-expr: ((create_stmt | insert_stmt | select_stmt) ';'+)
+stmt: ((create_stmt | insert_stmt | select_stmt) ';'+)
 ;
 
 create_stmt: 'CREATE' 'table' ID '(' column_list ')' ;
@@ -12,10 +13,8 @@ column_type: 'string' | 'int';
 insert_stmt: 'INSERT' 'INTO' ID '(' VAL ( ',' VAL )* ')' ;
 VAL : INT | STRING ;
 
-select_stmt_new_line: select_stmt ('WHERE' CONDS)*;
-select_stmt: 'SELECT' ((ID (',' ID)*) | '*') 'FROM' ID ;
-CONDS: COND (('OR'| 'AND') COND)* ;
-COND : ID ('=' | '>' | '<' | '>=' | '<=' | '!=') VAL ;
+select_stmt: 'SELECT' ((ID (',' ID)*) | '*') 'FROM' ID ('WHERE' cond (('OR'| 'AND') cond)*)*;
+cond : ID (EQ | GR | LS | GEQ | LEQ | NEQ) VAL ;
 
 EQ: '=';
 GR: '>';
@@ -24,8 +23,8 @@ GEQ: '>=';
 LEQ: '<=';
 NEQ: '!=';
 
-ID: [a-zA-Z]+;
-// NEWLINE : [\r\n]+ ;
+ID: [a-zA-Z_][a-zA-Z0-9_]*;
 INT : [0-9]+ ;
 STRING: '"' (~('\n' | '"'))* '"';
+COMMENT: '//' ~[\r\n]* -> skip;
 WS : [ \t\r\n] -> channel(HIDDEN);
