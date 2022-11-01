@@ -62,15 +62,6 @@ class ExprListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#select_stmt.
-    def enterSelect_stmt(self, ctx:ExprParser.Select_stmtContext):
-        pass
-
-    # Exit a parse tree produced by ExprParser#select_stmt.
-    def exitSelect_stmt(self, ctx:ExprParser.Select_stmtContext):
-        pass
-
-
     # Enter a parse tree produced by ExprParser#insert_stmt.
     def enterInsert_stmt(self, ctx:ExprParser.Insert_stmtContext):
         pass
@@ -80,12 +71,30 @@ class ExprListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#data.
-    def enterData(self, ctx:ExprParser.DataContext):
+    # Enter a parse tree produced by ExprParser#select_stmt.
+    def enterSelect_stmt(self, ctx:ExprParser.Select_stmtContext):
         pass
 
-    # Exit a parse tree produced by ExprParser#data.
-    def exitData(self, ctx:ExprParser.DataContext):
+    # Exit a parse tree produced by ExprParser#select_stmt.
+    def exitSelect_stmt(self, ctx:ExprParser.Select_stmtContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#select.
+    def enterSelect(self, ctx:ExprParser.SelectContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#select.
+    def exitSelect(self, ctx:ExprParser.SelectContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#cond.
+    def enterCond(self, ctx:ExprParser.CondContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#cond.
+    def exitCond(self, ctx:ExprParser.CondContext):
         pass
 
 

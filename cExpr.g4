@@ -12,9 +12,10 @@ column_type: 'string' | 'int';
 insert_stmt: 'INSERT' 'INTO' ID '(' VAL ( ',' VAL )* ')' ;
 VAL : INT | STRING ;
 
-select_stmt: select ('WHERE' cond (('OR'| 'AND') cond)*)*;
-select: 'SELECT' ((ID (',' ID)*) | '*') 'FROM' ID ;
-cond : ID (EQ | GR | LS | GEQ | LEQ | NEQ) VAL ;
+select_stmt_new_line: select_stmt ('WHERE' CONDS)*;
+select_stmt: 'SELECT' ((ID (',' ID)*) | '*') 'FROM' ID ;
+CONDS: COND (('OR'| 'AND') COND)* ;
+COND : ID ('=' | '>' | '<' | '>=' | '<=' | '!=') VAL ;
 
 EQ: '=';
 GR: '>';
