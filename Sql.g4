@@ -13,9 +13,10 @@ column_type: 'string' | 'int';
 insert_stmt: 'INSERT' 'INTO' ID '(' VAL ( ',' VAL )* ')' ;
 VAL : INT | STRING ;
 
-select_stmt: 'SELECT' ((ID (',' ID)*) | '*') 'FROM' ID ('WHERE' cond (('OR'| 'AND') cond)*)*;
+select_stmt: 'SELECT' ((ID (',' ID)*) | '*') 'FROM' ID ('WHERE' cond (LOP cond)*)*;
 cond : ID (OP) VAL ;
 
+LOP: 'OR'| 'AND';
 OP: EQ | GR | LS | GEQ | LEQ | NEQ;
 EQ: '=';
 GR: '>';

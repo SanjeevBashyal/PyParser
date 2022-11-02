@@ -1,3 +1,4 @@
+from importlib.resources import open_binary
 from antlr4 import *
 from SqlVisitor import SqlVisitor
 from SqlParser import SqlParser
@@ -66,7 +67,13 @@ class MySqlVisitor(SqlVisitor):
                         check_list_of_columns.remove(j)
 
         if len(ctx.cond())>0:
-            rows_required=self.visitConditions(ctx.cond(), table_name, rows_required)
+            selected_rows_list=self.visitConditions(ctx.cond(), table_name, rows_required)
+            logical_operators=ctx.LOP()
+            combined_list=selected_rows_list[0]
+            for i,logical_operator in enumerate(logical_operators):
+                combined_list=self.apply_logical_operator(logical_operator.getText(),selected_rows_list[i+1],combined_list)
+            rows_required=combined_list
+
 
         data=self.fetch(table_name, columns_required, rows_required)
         self.show(data)
@@ -74,6 +81,7 @@ class MySqlVisitor(SqlVisitor):
         return self.visitChildren(ctx)
 
     def visitConditions(self, condContextList, table_name, rows_required):
+        selected_rows_list=[]
         for ctx in condContextList:
             column_name=ctx.ID().getText()
             operator=ctx.OP().getText()
@@ -86,8 +94,8 @@ class MySqlVisitor(SqlVisitor):
                 flag=self.check_operator(operator,to_check,value)
                 if flag:
                     selected_rows.append(i)
-            rows_required=selected_rows
-        return rows_required
+            selected_rows_list.append(selected_rows)
+        return selected_rows_list
 
     def visitCond(self, ctx:SqlParser.CondContext):
         return self.visitChildren(ctx)
@@ -154,3 +162,14 @@ class MySqlVisitor(SqlVisitor):
                 return True
             else:
                 return False
+
+    def apply_logical_operator(self,operator,list1,list2):
+        set1=set(list1)
+        set2=set(list2)
+        if operator=='OR':
+            set3=set1.union(set2)
+        elif operator=='AND':
+            set3=set1.intersection(set2)
+        output=list(set3)
+        output.sort()
+        return output
