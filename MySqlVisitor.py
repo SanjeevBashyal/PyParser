@@ -41,16 +41,9 @@ class MySqlVisitor(SqlVisitor):
             ls=[]
             for i in range(count):
                 data_element=val[i].getText()
-                if self.columns[table_name][i][1]=='string':
-                    if data_element[0]!='"':
-                        raise ValueError(f"Column {self.columns[table_name][i][1]} of Table {table_name} requires string data type")
-                    else:
-                        ls.append(data_element[1:-1])
-                else:
-                    if data_element[0]=='"':
-                        raise ValueError(f"Column {self.columns[table_name][i][1]} of Table {table_name} requires string int type")
-                    else:
-                        ls.append(data_element)
+                data_seg=self.check_data_type(table_name,i,data_element)
+                ls.append(data_seg)
+                        
         self.data[table_name].append(ls)
         return self.visitChildren(ctx)    
     
@@ -81,7 +74,20 @@ class MySqlVisitor(SqlVisitor):
         return self.visitChildren(ctx)
 
     def visitConditions(self, condContextList, table_name, rows_required):
-        pass
+        for ctx in condContextList:
+            column_name=ctx.ID().getText()
+            operator=ctx.OP().getText()
+            value=ctx.VAL().getText()
+            column_index=self.check_column_index(table_name,column_name)
+            value=self.check_data_type(table_name,column_index,value)
+            selected_rows=[]
+            for i in rows_required:
+                to_check=self.data[table_name][i][column_index]
+                flag=self.check_operator(operator,to_check,value)
+                if flag:
+                    selected_rows.append(i)
+            rows_required=selected_rows
+        return rows_required
 
     def visitCond(self, ctx:SqlParser.CondContext):
         return self.visitChildren(ctx)
@@ -99,3 +105,52 @@ class MySqlVisitor(SqlVisitor):
                 print(data_element,'\t\t', end="", flush=True)               
             print()
         print()
+
+    def check_column_index(self,table_name,column_name):
+        for i,column_data in enumerate(self.columns[table_name]):
+            if column_data[0]==column_name:
+                return i
+
+    def check_data_type(self,table_name,column_index,data):
+        if self.columns[table_name][column_index][1]=='string':
+            if data[0]!='"':
+                raise ValueError(f"Column {self.columns[table_name][column_index][1]} of Table {table_name} requires string data type")
+            else:
+                return data[1:-1]
+        else:
+            if data[0]=='"':
+                raise ValueError(f"Column {self.columns[table_name][column_index][1]} of Table {table_name} requires string int type")
+            else:
+                return int(data)
+
+    def check_operator(self,operator,to_check,check_with):
+        if operator=='=':
+            if to_check == check_with:
+                return True
+            else:
+                return False
+        elif operator=='>':
+            if to_check > check_with:
+                return True
+            else:
+                return False
+        elif operator=='<':
+            if to_check < check_with:
+                return True
+            else:
+                return False
+        elif operator=='>=':
+            if to_check >= check_with:
+                return True
+            else:
+                return False
+        elif operator=='<=':
+            if to_check <= check_with:
+                return True
+            else:
+                return False
+        elif operator=='!=':
+            if to_check != check_with:
+                return True
+            else:
+                return False

@@ -14,8 +14,9 @@ insert_stmt: 'INSERT' 'INTO' ID '(' VAL ( ',' VAL )* ')' ;
 VAL : INT | STRING ;
 
 select_stmt: 'SELECT' ((ID (',' ID)*) | '*') 'FROM' ID ('WHERE' cond (('OR'| 'AND') cond)*)*;
-cond : ID (EQ | GR | LS | GEQ | LEQ | NEQ) VAL ;
+cond : ID (OP) VAL ;
 
+OP: EQ | GR | LS | GEQ | LEQ | NEQ;
 EQ: '=';
 GR: '>';
 LS: '<';

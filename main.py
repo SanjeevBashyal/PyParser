@@ -22,7 +22,6 @@ def main(argv):
     tree = parser.prog()
     # MySqlVisitor extends the generated visitor file
     MySqlVisitor().visitProg(tree) # Evaluate the expression
-    print("Test")
 
 if __name__ == '__main__':
     main(sys.argv)
