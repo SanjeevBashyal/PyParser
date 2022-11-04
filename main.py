@@ -3,7 +3,6 @@ import os
 from antlr4 import *
 from SqlLexer import SqlLexer
 from SqlParser import SqlParser
-from SqlVisitor import SqlVisitor
 from SqlExecution import SqlExecution
 
 path=os.getcwd()
