@@ -1,6 +1,16 @@
-CREATE table Student (name : string, age : int);
-INSERT INTO Student("alice", 12);
-INSERT INTO Student("bob", 15);
-INSERT INTO Student("cindy", 16);
-SELECT age, name FROM Student
-WHERE name != "alice" OR name = "alice";
+CREATE table Football (name : string, age : int, number : int, position : string);
+INSERT INTO Football ("Messi", 34, 30, "Striker");
+INSERT INTO Football ("Lewandoski", 30, 10, "Striker");
+INSERT INTO Football ("Ronaldo", 36, 7, "Striker");
+INSERT INTO Football ("Haaland", 21, 9, "Striker");
+INSERT INTO Football ("Mbappe", 22, 11, "Midfielder");
+INSERT INTO Football ("Iniesta", 38, 12, "Midfielder");
+INSERT INTO Football ("Bruyne", 32, 6, "Midfielder");
+INSERT INTO Football ("Jorginho", 30, 8, "Defender");
+INSERT INTO Football ("Kante", 29, 5, "Defender");
+INSERT INTO Football ("Alaba", 33, 2, "Defender");
+INSERT INTO Football ("Casilas", 36, 1, "GoalKeeper");
+SELECT name, number FROM Football
+WHERE position = "Striker";
+SELECT * FROM Football;
+SELECT name, age, position FROM Football WHERE age > 30;

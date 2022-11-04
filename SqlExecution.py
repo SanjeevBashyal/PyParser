@@ -1,11 +1,9 @@
-from importlib.resources import open_binary
 from antlr4 import *
 from SqlVisitor import SqlVisitor
 from SqlParser import SqlParser
 
-class MySqlVisitor(SqlVisitor):
+class SqlExecution(SqlVisitor):
     def __init__(self):
-        self.stack = []
         self.tables = {}
         self.columns = {}
         self.data = {}
@@ -51,6 +49,8 @@ class MySqlVisitor(SqlVisitor):
     def visitSelect_stmt(self, ctx:SqlParser.Select_stmtContext):
         ids=ctx.ID()
         table_name=ids[-1].getText()
+        if not table_name in self.tables.values():
+            raise ValueError(f"Table {table_name} not present")
         total_number_of_columns=len(self.columns[table_name])
         all_columns=list(range(total_number_of_columns))
         columns_required=[]

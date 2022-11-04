@@ -4,7 +4,7 @@ from antlr4 import *
 from SqlLexer import SqlLexer
 from SqlParser import SqlParser
 from SqlVisitor import SqlVisitor
-from MySqlVisitor import MySqlVisitor
+from SqlExecution import SqlExecution
 
 path=os.getcwd()
 
@@ -14,14 +14,12 @@ def readInputFile(filename):
     return data
 
 def main(argv):
-    # Takes input from a file
     input = InputStream(readInputFile(os.path.join(path,'code.txt')))
     lexer = SqlLexer(input)
     stream = CommonTokenStream(lexer)
     parser = SqlParser(stream)
     tree = parser.prog()
-    # MySqlVisitor extends the generated visitor file
-    MySqlVisitor().visitProg(tree) # Evaluate the expression
+    SqlExecution().visitProg(tree)
 
 if __name__ == '__main__':
     main(sys.argv)
