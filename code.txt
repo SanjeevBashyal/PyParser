@@ -14,3 +14,4 @@ SELECT name, number FROM Football
 WHERE position = "Striker";
 SELECT * FROM Football;
 SELECT name, age, position FROM Football WHERE age > 30;
+SELECT name, number, position FROM Football WHERE position = "Striker" OR position = "Defender";
