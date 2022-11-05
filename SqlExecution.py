@@ -108,9 +108,20 @@ class SqlExecution(SqlVisitor):
 
     def show(self, data):
         print()
+        spaces=[]
+        space=0
+        for j in range(len(data[0])):
+            for i in range(len(data)):
+                space_check=len(str(data[i][j]))
+                if space_check>space:
+                    space=space_check
+            spaces.append(space+3)
+            space=0
+
         for data_row in data:
-            for data_element in data_row:
-                print(data_element,'\t\t', end="", flush=True)               
+            for (j,data_element) in enumerate(data_row):
+                l=len(str(data_element))
+                print(data_element,' '*(spaces[j]-l), end="", flush=True)               
             print()
         print()
 
