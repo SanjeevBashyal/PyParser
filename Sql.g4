@@ -2,7 +2,7 @@ grammar Sql;
 prog: expr EOF;
 expr: stmt*;
 
-stmt: ((create_stmt | insert_stmt | select_stmt) ';'+)
+stmt: ((create_stmt | insert_stmt | select_stmt | delete_stmt) ';'+)
 ;
 
 create_stmt: 'CREATE' 'table' ID '(' column_list ')' ;
@@ -13,8 +13,13 @@ column_type: 'string' | 'int';
 insert_stmt: 'INSERT' 'INTO' ID '(' VAL ( ',' VAL )* ')' ;
 VAL : INT | STRING ;
 
-select_stmt: 'SELECT' ((ID (',' ID)*) | '*') 'FROM' ID ('WHERE' cond (LOP cond)*)*;
+select_stmt: 'SELECT' (min_max | ids) 'FROM' ID ('WHERE' cond (LOP cond)*)*;
 cond : ID (OP) VAL ;
+min_max: MINMAX '(' ID ')';
+ids:((ID (',' ID)*) | '*');
+MINMAX: 'MIN' | 'MAX' | 'COUNT';
+
+delete_stmt: 'DELETE' 'FROM' ID ('WHERE' cond (LOP cond)*)*;
 
 LOP: 'OR'| 'AND';
 OP: EQ | GR | LS | GEQ | LEQ | NEQ;

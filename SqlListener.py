@@ -98,5 +98,32 @@ class SqlListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by SqlParser#min_max.
+    def enterMin_max(self, ctx:SqlParser.Min_maxContext):
+        pass
+
+    # Exit a parse tree produced by SqlParser#min_max.
+    def exitMin_max(self, ctx:SqlParser.Min_maxContext):
+        pass
+
+
+    # Enter a parse tree produced by SqlParser#ids.
+    def enterIds(self, ctx:SqlParser.IdsContext):
+        pass
+
+    # Exit a parse tree produced by SqlParser#ids.
+    def exitIds(self, ctx:SqlParser.IdsContext):
+        pass
+
+
+    # Enter a parse tree produced by SqlParser#delete_stmt.
+    def enterDelete_stmt(self, ctx:SqlParser.Delete_stmtContext):
+        pass
+
+    # Exit a parse tree produced by SqlParser#delete_stmt.
+    def exitDelete_stmt(self, ctx:SqlParser.Delete_stmtContext):
+        pass
+
+
 
 del SqlParser

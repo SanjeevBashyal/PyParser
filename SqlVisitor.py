@@ -59,5 +59,20 @@ class SqlVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by SqlParser#min_max.
+    def visitMin_max(self, ctx:SqlParser.Min_maxContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SqlParser#ids.
+    def visitIds(self, ctx:SqlParser.IdsContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by SqlParser#delete_stmt.
+    def visitDelete_stmt(self, ctx:SqlParser.Delete_stmtContext):
+        return self.visitChildren(ctx)
+
+
 
 del SqlParser

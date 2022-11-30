@@ -47,25 +47,70 @@ class SqlExecution(SqlVisitor):
         return self.visitChildren(ctx)    
     
     def visitSelect_stmt(self, ctx:SqlParser.Select_stmtContext):
-        ids=ctx.ID()
-        table_name=ids[-1].getText()
+        table_name=ctx.ID().getText()
+        rows_required=list(range(len(self.data[table_name])))
+        if len(ctx.cond())>0:
+            selected_rows_list=self.visitConditions(ctx.cond(), table_name, rows_required)
+            logical_operators=ctx.LOP()
+            combined_list=selected_rows_list[0]
+            for i,logical_operator in enumerate(logical_operators):
+                combined_list=self.apply_logical_operator(logical_operator.getText(),selected_rows_list[i+1],combined_list)
+            rows_required=combined_list
+        if ctx.min_max():
+            min_max=ctx.min_max()
+            type=min_max.MINMAX().getText()
+            column_name=min_max.ID().getText()
+            column_required=[idx for idx in range(len(self.columns[table_name])) if self.columns[table_name][idx][0]==column_name][0]
+            value=self.get_min_max_count(table_name, column_required,rows_required,type)
+            print(value)
+            print()
+
+
+        else:
+            id_s=ctx.ids()
+            ids=id_s.ID()
+            
+            if not table_name in self.tables.values():
+                raise ValueError(f"Table {table_name} not present")
+            total_number_of_columns=len(self.columns[table_name])
+            all_columns=list(range(total_number_of_columns))
+            columns_required=[]
+            if ctx.getChild(1).getText()=='*':
+                columns_required=all_columns
+            else:
+                check_list_of_columns=all_columns
+                for i in range(len(ids)-1):
+                    column_name=ids[i].getText()
+                    for j in check_list_of_columns:
+                        if column_name==self.columns[table_name][j][0]:
+                            columns_required.append(j)
+                            check_list_of_columns.remove(j)
+
+            data=self.fetch(table_name, columns_required, rows_required)
+            self.show(data)
+        
+
+        return self.visitChildren(ctx)
+    
+    def get_min_max_count(self, table_name, column_required, rows_required, type):
+        column_data=self.fetch_column(table_name,column_required,rows_required)
+        if type=='MAX':
+            column_data.sort()
+            return column_data[-1]
+        elif type=='MIN':
+            column_data.sort()
+            return column_data[0]
+        elif type=='COUNT':
+            return len(column_data)
+
+    def visitDelete_stmt(self, ctx:SqlParser.Delete_stmtContext):
+        id=ctx.ID()
+        table_name=id.getText()
         if not table_name in self.tables.values():
             raise ValueError(f"Table {table_name} not present")
         total_number_of_columns=len(self.columns[table_name])
         all_columns=list(range(total_number_of_columns))
-        columns_required=[]
         rows_required=list(range(len(self.data[table_name])))
-        if ctx.getChild(1).getText()=='*':
-            columns_required=all_columns
-        else:
-            check_list_of_columns=all_columns
-            for i in range(len(ids)-1):
-                column_name=ids[i].getText()
-                for j in check_list_of_columns:
-                    if column_name==self.columns[table_name][j][0]:
-                        columns_required.append(j)
-                        check_list_of_columns.remove(j)
-
         if len(ctx.cond())>0:
             selected_rows_list=self.visitConditions(ctx.cond(), table_name, rows_required)
             logical_operators=ctx.LOP()
@@ -75,8 +120,7 @@ class SqlExecution(SqlVisitor):
             rows_required=combined_list
 
 
-        data=self.fetch(table_name, columns_required, rows_required)
-        self.show(data)
+        self.delete(table_name, rows_required)
 
         return self.visitChildren(ctx)
 
@@ -99,6 +143,13 @@ class SqlExecution(SqlVisitor):
 
     def visitCond(self, ctx:SqlParser.CondContext):
         return self.visitChildren(ctx)
+
+    def delete(self,table_name,rows_required):
+        self.data[table_name]=[row for id, row in enumerate(self.data[table_name]) if id not in rows_required]
+
+    def fetch_column(self, table_name, column_required, rows_required):
+        data=[self.data[table_name][i][column_required] for i in rows_required]
+        return data
 
     def fetch(self, table_name, columns_required, rows_required):
         column_names=[self.columns[table_name][j][0] for j in columns_required]
